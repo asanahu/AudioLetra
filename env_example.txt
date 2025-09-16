@@ -1,0 +1,77 @@
+# Archivo .env de ejemplo
+# Copia este archivo a .env y personaliza la configuración
+
+# ===== CONFIGURACIÓN DE AUDIO =====
+# Dispositivo de entrada de audio (dejar vacío para usar el predeterminado)
+AUDIO_INPUT_DEVICE=
+
+# Configuración de audio
+SAMPLE_RATE=16000
+CHUNK_SIZE=1024
+CHANNELS=1
+
+# ===== CONFIGURACIÓN DE WHISPER =====
+# Modelo de Whisper (tiny, base, small, medium, large)
+WHISPER_MODEL=base
+
+# Idioma para transcripción (es, en, auto para detección automática)
+WHISPER_LANGUAGE=es
+
+# Usar GPU si está disponible
+WHISPER_USE_GPU=true
+
+# ===== CONFIGURACIÓN DE VAD (Voice Activity Detection) =====
+# Sensibilidad del detector de voz (0-3, donde 3 es más sensible)
+VAD_SENSITIVITY=2
+
+# Duración mínima de silencio para cortar (en segundos)
+VAD_SILENCE_DURATION=1.0
+
+# Duración mínima de voz para procesar (en segundos)
+VAD_MIN_SPEECH_DURATION=0.5
+
+# ===== CONFIGURACIÓN DE LLM (OPCIONAL) =====
+# Habilitar post-procesado con LLM
+LLM_ENABLED=false
+
+# Proveedor de LLM (openai o openrouter)
+LLM_PROVIDER=openrouter
+
+# API Key de OpenAI o OpenRouter
+# OpenAI: https://platform.openai.com/api-keys
+# OpenRouter: https://openrouter.ai/keys
+OPENAI_API_KEY=
+
+# Modelo de LLM a usar
+# Para OpenAI: gpt-4o-mini, gpt-4o, gpt-3.5-turbo
+# Para OpenRouter: openai/gpt-4o-mini, anthropic/claude-3-haiku, meta-llama/llama-3.1-8b-instruct
+OPENAI_MODEL=openai/gpt-4o-mini
+
+# URL base personalizada (dejar vacío para usar la predeterminada)
+LLM_BASE_URL=
+
+# Prompts personalizados para diferentes tipos de procesamiento
+LLM_PROMPT_CLEANUP=Mejora la puntuación y formato de este texto transcrito, manteniendo el contenido original:
+LLM_PROMPT_SUMMARY=Crea un resumen conciso de este texto:
+LLM_PROMPT_TASKS=Extrae las tareas y puntos importantes de este texto en formato de lista:
+LLM_PROMPT_EMAIL=Formatea este texto como un email profesional:
+
+# ===== CONFIGURACIÓN DE ARCHIVOS =====
+# Directorio donde guardar las transcripciones
+OUTPUT_DIR=output
+
+# Formato de archivo de salida (txt, md, json)
+OUTPUT_FORMAT=txt
+
+# Incluir timestamp en nombres de archivo
+INCLUDE_TIMESTAMP=true
+
+# ===== CONFIGURACIÓN DE INTERFAZ =====
+# Mostrar transcripción en tiempo real
+REALTIME_DISPLAY=true
+
+# Mostrar información de debug
+DEBUG_MODE=false
+
+# Colores para la consola (true/false)
+USE_COLORS=true

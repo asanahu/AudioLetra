@@ -1,0 +1,156 @@
+# Archivos de configuración sensibles
+.env
+.env.local
+.env.production
+.env.staging
+*.env
+config/config.env
+config/production.env
+config/local.env
+
+# Archivos de API keys y credenciales
+openrouter.env
+openrouter_example.env
+api_keys.txt
+credentials.json
+secrets.json
+
+# Archivos de audio y multimedia
+*.wav
+*.mp3
+*.mp4
+*.avi
+*.mov
+*.m4a
+*.flac
+*.aac
+*.ogg
+
+# Archivos de transcripción y output
+output/
+transcriptions/
+audio_files/
+recordings/
+dictations/
+
+# Logs y archivos temporales
+logs/
+*.log
+*.tmp
+*.temp
+tmp/
+temp/
+.tmp/
+.temp/
+
+# Archivos de Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Entornos virtuales
+.venv/
+venv/
+ENV/
+env/
+.env/
+.venv
+venv
+ENV
+env
+
+# IDEs y editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Archivos de sistema
+*.pid
+*.seed
+*.pid.lock
+.npm
+.eslintcache
+.node_repl_history
+*.tgz
+.yarn-integrity
+
+# Archivos de backup
+*.bak
+*.backup
+*.old
+*.orig
+
+# Archivos de caché
+.cache/
+*.cache
+.pytest_cache/
+
+# Archivos de cobertura
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+.hypothesis/
+
+# Archivos de Jupyter Notebook
+.ipynb_checkpoints
+
+# Archivos de mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Archivos de Pyre type checker
+.pyre/
+
+# Archivos específicos del proyecto
+_head.txt
+_start_block.py
+_start_old.py
+_start_window.txt
+_stop_block.py
+tmp_chars.txt
+web/static/js/_stop_block.txt
+
+# Archivos de configuración local
+config_local.py
+local_config.py
+user_config.py
+
+# Archivos de base de datos
+*.db
+*.sqlite
+*.sqlite3
+
+# Archivos de modelos de IA (pueden ser grandes)
+models/
+*.model
+*.pkl
+*.joblib
+
+# Archivos de configuración específicos del sistema
+system_config.json
+user_preferences.json

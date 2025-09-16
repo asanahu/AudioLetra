@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AudioLetra - Captura tus ideas, la IA las escribe</title>
+    <!-- CSS simplificado con fallbacks -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style-simple.css') }}?v=20250916">
+    <!-- Fallback para fuentes -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body { font-family: 'Inter', Arial, sans-serif; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1>🎙️ AudioLetra</h1>
+                <p>Captura tus ideas, la IA las escribe</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Status Panel -->
+            <div class="status-panel">
+                <div class="status-item">
+                    <span>🧠 Whisper: <span class="status-badge" id="whisper-status">Cargando...</span></span>
+                </div>
+                <div class="status-item">
+                    <span>🤖 LLM: <span class="status-badge" id="llm-status">Verificando...</span></span>
+                </div>
+                <div class="status-item">
+                    <span>● <span id="recording-status">Listo</span></span>
+                </div>
+            </div>
+
+            <!-- Recording Controls -->
+            <div class="recording-section">
+                <div class="recording-controls">
+                    <button id="record-btn" class="record-button" disabled>
+                        🎙️ Iniciar grabación
+                    </button>
+                    
+                    <div class="recording-options">
+                        <label>
+                            <input type="checkbox" id="use-llm-checkbox">
+                            Mejorar con IA
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Current Transcription -->
+            <div class="transcription-section">
+                <div class="section-header">
+                    <h3>📄 Transcripción actual</h3>
+                    <div class="transcription-actions">
+                        <button id="copy-current-btn" class="btn">📋 Copiar</button>
+                        <button id="download-current-btn" class="btn">💾 Descargar</button>
+                        <button id="translate-btn" class="btn">🌐 Traducir</button>
+                    </div>
+                </div>
+                <div class="transcription-box" id="current-transcription">
+                    <p class="placeholder">Presiona el botón para comenzar a grabar...</p>
+                </div>
+            </div>
+
+            <!-- Recent Dictations -->
+            <div class="dictations-section">
+                <h3>📚 Últimos dictados</h3>
+                <div class="dictations-list" id="dictations-list">
+                    <div class="empty-state">
+                        <p>No hay dictados recientes</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2024 AudioLetra - Captura tus ideas, la IA las escribe</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}?v=20250916"></script>
+</body>
+</html>

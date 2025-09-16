@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AudioLetra - Captura tus ideas, la IA las escribe</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css?v=20250916-5">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <meta name="color-scheme" content="light dark">
+    <meta name="theme-color" content="#0ea5e9">
+    <meta name="description" content="AudioLetra: Captura tus ideas con voz, la IA las convierte en texto perfecto. Transcripción inteligente con Whisper y procesamiento avanzado.">
+</head>
+<body>
+    <!-- Toggle de tema -->
+    <button id="theme-toggle" class="theme-toggle" title="Cambiar tema" aria-label="Cambiar tema">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-microphone"></i> AudioLetra</h1>
+                <p>Captura tus ideas, la IA las escribe</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Status Panel -->
+            <div class="status-panel">
+                <div class="status-item">
+                    <i class="fas fa-brain"></i>
+                    <span>Whisper: <span class="status-badge" id="whisper-status">Cargando...</span></span>
+                </div>
+                <div class="status-item">
+                    <i class="fas fa-robot"></i>
+                    <span>LLM: <span class="status-badge" id="llm-status">Verificando...</span></span>
+                </div>
+                <div class="status-item">
+                    <i class="fas fa-circle" id="recording-indicator"></i>
+                    <span id="recording-status">Listo</span>
+                </div>
+            </div>
+
+            <!-- Recording Controls -->
+            <div class="recording-section">
+                <div class="recording-controls">
+                    <button id="record-btn" class="record-button" disabled>
+                        <i class="fas fa-microphone"></i>
+                        <span>Iniciar grabación</span>
+                    </button>
+                    
+                    <div class="recording-options">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="use-llm-checkbox">
+                            <span class="checkmark"></span>
+                            Mejorar con IA
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Recording Timer -->
+                <div class="recording-timer" id="recording-timer" style="display: none;">
+                    <i class="fas fa-circle recording-pulse"></i>
+                    <span id="timer-text">00:00</span>
+                </div>
+            </div>
+
+            <!-- Current Transcription -->
+            <div class="transcription-section">
+                <div class="section-header">
+                    <h3><i class="fas fa-file-lines"></i> Transcripción actual</h3>
+                    <div class="transcription-actions">
+                        <button id="copy-current-btn" class="btn btn-ghost" title="Copiar">
+                            <i class="fas fa-copy"></i>
+                            <span>Copiar</span>
+                        </button>
+                        <button id="download-current-btn" class="btn btn-ghost" title="Descargar">
+                            <i class="fas fa-download"></i>
+                            <span>Descargar</span>
+                        </button>
+                        <button id="translate-btn" class="btn" title="Traducir al inglés">
+                            <i class="fas fa-language"></i>
+                            <span>Traducir</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="transcription-box" id="current-transcription">
+                    <p class="placeholder">Presiona el botón para comenzar a grabar...</p>
+                </div>
+            </div>
+
+            <!-- Summary Section -->
+            <div class="transcription-section" id="summary-section">
+                <div class="section-header">
+                    <h3><i class="fas fa-list"></i> Resumen</h3>
+                    <div class="transcription-actions">
+                        <button id="generate-summary-btn" class="btn" title="Generar resumen">
+                            <i class="fas fa-bolt"></i>
+                            <span>Generar resumen</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="transcription-box" id="summary-box"></div>
+            </div>
+
+            <!-- Translation Section -->
+            <div class="transcription-section" id="translation-section" style="display:none;">
+                <div class="section-header">
+                    <h3><i class="fas fa-language"></i> Traducción (inglés)</h3>
+                </div>
+                <div class="transcription-box" id="translation-box"></div>
+            </div>
+
+            <!-- Recent Dictations -->
+            <div class="dictations-section">
+                <h3><i class="fas fa-history"></i> Últimos dictados</h3>
+                <div class="dictations-list" id="dictations-list">
+                    <div class="empty-state">
+                        <i class="fas fa-microphone-slash"></i>
+                        <p>No hay dictados recientes</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2024 AudioLetra - Captura tus ideas, la IA las escribe</p>
+        </footer>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Procesando audio...</p>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <script src="/static/js/app.js?v=20250916-5"></script>
+</body>
+</html>

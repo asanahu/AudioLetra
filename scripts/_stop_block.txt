@@ -1,0 +1,30 @@
+﻿// Detener grabaciÃ³n
+async function stopRecording() {
+  try {
+    showLoadingOverlay(true);
+
+    const response = await fetch('/api/stop_recording', { method: 'POST', headers: { 'Content-Type': 'application/json' } });
+    const data = await response.json();
+
+    if (response.ok) {
+      if (data.result && data.result.success) {
+        showCurrentTranscription(data.result.text);
+        await loadRecentDictations();
+        showToast('TranscripciÃ³n completada', 'success');
+      } else {
+        throw new Error((data.result && data.result.error) || 'Error al procesar audio');
+      }
+    } else {
+      throw new Error(data.error || 'Error al detener grabaciÃ³n');
+    }
+  } catch (error) {
+    console.error('Error al detener grabaciÃ³n:', error);
+    showToast('Error al procesar audio: ' + error.message, 'error');
+  } finally {
+    appState.isRecording = false;
+    updateRecordingUI(false);
+    stopRecordingTimer();
+    showLoadingOverlay(false);
+  }
+}
+
