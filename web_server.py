@@ -249,7 +249,7 @@ class WebDictationServer:
             try:
                 self.audio_buffer.extend(indata.flatten().tolist())
                 # Limitar buffer a ~60s
-                max_buffer_size = config.sample_rate * 60
+                max_buffer_size = config.sample_rate * 300
                 if len(self.audio_buffer) > max_buffer_size:
                     self.audio_buffer = self.audio_buffer[-max_buffer_size:]
             except Exception as e:
