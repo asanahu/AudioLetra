@@ -96,6 +96,36 @@
   --gradient-error: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
 }
 
+/* Fondo específico para modo oscuro */
+.theme-dark body::before {
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(129, 140, 248, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(167, 139, 250, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(52, 211, 153, 0.08) 0%, transparent 50%),
+    linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+}
+
+.theme-dark body::after {
+  background-image: 
+    linear-gradient(45deg, transparent 40%, rgba(255, 255, 255, 0.01) 50%, transparent 60%),
+    linear-gradient(-45deg, transparent 40%, rgba(255, 255, 255, 0.005) 50%, transparent 60%);
+  opacity: 0.4;
+}
+
+/* Tarjetas en modo oscuro */
+.theme-dark .status-panel,
+.theme-dark .recording-section,
+.theme-dark .transcription-section,
+.theme-dark .dictations-section {
+  background: rgba(30, 41, 59, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(51, 65, 85, 0.3);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    0 2px 8px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
 /* Reset y base */
 * {
   box-sizing: border-box;
@@ -116,6 +146,41 @@ body {
   transition: background-color var(--transition-normal), color var(--transition-normal);
   min-height: 100vh;
   overflow-x: hidden;
+  position: relative;
+}
+
+/* Fondo profesional con gradientes y patrones */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(16, 185, 129, 0.05) 0%, transparent 50%),
+    linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+  z-index: -2;
+  transition: all var(--transition-slow);
+}
+
+/* Patrón geométrico sutil */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(45deg, transparent 40%, rgba(255, 255, 255, 0.02) 50%, transparent 60%),
+    linear-gradient(-45deg, transparent 40%, rgba(255, 255, 255, 0.01) 50%, transparent 60%);
+  background-size: 60px 60px, 80px 80px;
+  z-index: -1;
+  opacity: 0.6;
+  transition: opacity var(--transition-normal);
 }
 
 /* Contenedor principal */
@@ -181,11 +246,15 @@ body {
 .recording-section,
 .transcription-section,
 .dictations-section {
-  background: var(--surface);
-  border: 1px solid var(--border-light);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 20px;
   padding: 2rem;
-  box-shadow: var(--shadow-lg);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    0 2px 8px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
   transition: all var(--transition-normal);
   position: relative;
   overflow: hidden;
