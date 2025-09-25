@@ -82,8 +82,25 @@ class TextProcessor:
             return None
         if not text or not text.strip():
             return text
-        if target_lang.lower() != "en":
-            return None
+        
+        # Mapeo de códigos de idioma a nombres completos
+        lang_names = {
+            'en': 'inglés',
+            'fr': 'francés', 
+            'de': 'alemán',
+            'pt': 'portugués',
+            'es': 'español',
+            'it': 'italiano',
+            'nl': 'holandés',
+            'ru': 'ruso',
+            'zh': 'chino',
+            'ja': 'japonés',
+            'ko': 'coreano',
+            'ar': 'árabe'
+        }
+        
+        target_lang_name = lang_names.get(target_lang.lower(), 'inglés')
+        
         try:
             extra_headers = {}
             if self.provider == "openrouter":
@@ -91,8 +108,8 @@ class TextProcessor:
                 extra_headers["X-Title"] = "Whisper Dictation"
 
             prompt = (
-                "Traduce fiel y naturalmente al ingles el siguiente texto en espanol. "
-                "Mantén el significado, nombres propios y formato basico. "
+                f"Traduce fiel y naturalmente al {target_lang_name} el siguiente texto en español. "
+                "Mantén el significado, nombres propios y formato básico. "
                 "Devuelve solo el texto traducido, sin notas ni explicaciones:\n\n" + text
             )
 

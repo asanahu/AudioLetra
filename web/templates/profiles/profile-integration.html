@@ -1,0 +1,63 @@
+﻿<!-- AudioLetra Profile Processing Integration -->
+<!-- This template integrates with the existing AudioLetra interface -->
+
+<div class="profile-section">
+    <h3>Procesar con LLM</h3>
+    <p class="profile-description">
+        Selecciona un perfil de procesamiento para mejorar tu transcripción con inteligencia artificial.
+        <strong>Solo se envía texto al LLM, nunca audio.</strong>
+    </p>
+    
+    <div class="profile-controls">
+        <select id="profile-select" class="profile-select">
+            <option value="">Selecciona un perfil...</option>
+        </select>
+        
+        <div id="language-selector" class="language-selector">
+            <label for="target-language">Idioma destino:</label>
+            <select id="target-language" class="target-language">
+                <option value="en">Inglés</option>
+                <option value="fr">Francés</option>
+                <option value="de">Alemán</option>
+            </select>
+        </div>
+        
+        <button id="process-btn" class="process-btn" disabled>
+            Procesar
+        </button>
+    </div>
+    
+    <div id="processing-indicator" class="processing-indicator">
+        Procesando con LLM...
+    </div>
+</div>
+
+<div id="results-section" class="results-section" style="display: none;">
+    <h3>Resultados</h3>
+    
+    <div id="result-tabs" class="result-tabs">
+        <!-- Result tabs will be dynamically generated -->
+    </div>
+    
+    <div id="results-container" class="results-container">
+        <!-- Result panels will be dynamically generated -->
+    </div>
+</div>
+
+<!-- Profile descriptions for user guidance -->
+<div class="profile-info" style="margin-top: 20px; padding: 15px; background-color: #f8f9fa; border-radius: 4px;">
+    <h4>Perfiles Disponibles:</h4>
+    <ul style="margin: 10px 0; padding-left: 20px;">
+        <li><strong>Limpiar y Formatear:</strong> Mejora la puntuación y estructura del texto</li>
+        <li><strong>Resumir:</strong> Crea un resumen conciso y estructurado</li>
+        <li><strong>Extraer Lista de Tareas:</strong> Identifica tareas accionables con verbos en infinitivo</li>
+        <li><strong>Formatear como Email:</strong> Estructura el texto como un email profesional</li>
+        <li><strong>Crear Acta de Reunión:</strong> Organiza el texto como acta de reunión</li>
+        <li><strong>Traducir:</strong> Traduce el texto al idioma seleccionado</li>
+    </ul>
+</div>
+
+<!-- Privacy notice -->
+<div class="privacy-notice" style="margin-top: 15px; padding: 10px; background-color: #e7f3ff; border-left: 4px solid #007bff; border-radius: 4px;">
+    <strong>🔒 Privacidad:</strong> Tu audio se procesa completamente en local. Solo el texto transcrito se envía al LLM para mejorarlo, y nunca se almacena en servicios externos.
+</div>

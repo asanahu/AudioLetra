@@ -29,7 +29,13 @@ const elements = {
   summarySection: document.getElementById('summary-section'),
   summaryBox: document.getElementById('summary-box'),
   translationSection: document.getElementById('translation-section'),
-  translationBox: document.getElementById('translation-box')
+  translationBox: document.getElementById('translation-box'),
+  llmProfilesSection: document.getElementById('llm-profiles-section'),
+  profileSelect: document.getElementById('profile-select'),
+  processBtn: document.getElementById('process-btn'),
+  languageSelector: document.getElementById('language-selector'),
+  targetLanguage: document.getElementById('target-language'),
+  resultsContainer: document.getElementById('results-container')
 };
 
 // Inicialización
@@ -44,6 +50,9 @@ async function initializeApp() {
     await loadSystemStatus();
     await loadRecentDictations();
     setupEventListeners();
+    
+    // Inicializar ProfileManager
+    await initializeProfileManager();
     
     // Animación de entrada para las tarjetas
     animateCards();
@@ -126,8 +135,27 @@ function setupEventListeners() {
     });
   }
 
-  if (elements.translateBtn) elements.translateBtn.addEventListener('click', translateCurrentText);
-  if (elements.summaryBtn) elements.summaryBtn.addEventListener('click', generateSummary);
+  // Deshabilitar botones duplicados (funcionalidad movida a LLM Profiles)
+  if (elements.translateBtn) {
+    elements.translateBtn.style.display = 'none'; // Ocultar botón de traducir
+  }
+  if (elements.summaryBtn) {
+    elements.summaryBtn.style.display = 'none'; // Ocultar botón de resumir
+  }
+  
+  // Event listeners para perfiles LLM
+  if (elements.profileSelect) {
+    elements.profileSelect.addEventListener('change', function() {
+      const isTranslate = this.value === 'translate';
+      if (elements.languageSelector) {
+        elements.languageSelector.style.display = isTranslate ? 'block' : 'none';
+      }
+    });
+  }
+  
+  if (elements.processBtn) {
+    elements.processBtn.addEventListener('click', processWithProfile);
+  }
 
   if (elements.themeToggle) elements.themeToggle.addEventListener('click', toggleTheme);
 }
@@ -303,6 +331,11 @@ function showCurrentTranscription(text) {
     box.innerHTML = `<p>${escapeHtml(safe)}</p>`;
     box.classList.add('has-content');
     appState.currentText = safe;
+    
+    // Mostrar sección de perfiles LLM si hay texto
+    if (safe.trim()) {
+      showLLMProfilesSection();
+    }
     
     // Animación de entrada
     box.style.transition = 'all 0.4s ease';
@@ -514,5 +547,197 @@ function showTranslation(text) {
     elements.translationSection.style.transition = 'all 0.4s ease';
     elements.translationSection.style.opacity = '1';
     elements.translationSection.style.transform = 'translateY(0)';
+  }, 100);
+}
+
+// Inicializar ProfileManager
+async function initializeProfileManager() {
+  try {
+    // Cargar perfiles desde el servidor
+    const response = await fetch('/llm/profiles');
+    if (response.ok) {
+      const data = await response.json();
+      const profiles = data.profiles;
+      
+      // Llenar el dropdown
+      const profileSelect = elements.profileSelect;
+      if (profileSelect) {
+        profileSelect.innerHTML = '<option value="">Selecciona un perfil...</option>';
+        profiles.forEach(profile => {
+          const option = document.createElement('option');
+          option.value = profile.id;
+          option.textContent = profile.name;
+          profileSelect.appendChild(option);
+        });
+        
+        // Habilitar el botón de procesar
+        if (elements.processBtn) {
+          elements.processBtn.disabled = false;
+        }
+      }
+      
+      console.log('Perfiles cargados:', profiles.length);
+    } else {
+      console.error('Error cargando perfiles:', response.status);
+    }
+  } catch (error) {
+    console.error('Error inicializando ProfileManager:', error);
+  }
+}
+
+// Procesar texto con perfil seleccionado
+async function processWithProfile() {
+  const profileId = elements.profileSelect?.value;
+  const text = appState.currentText;
+  
+  if (!profileId) {
+    showToast('Selecciona un perfil', 'warning');
+    return;
+  }
+  
+  if (!text) {
+    showToast('No hay texto para procesar', 'warning');
+    return;
+  }
+  
+  try {
+    // Deshabilitar botón y mostrar loading
+    if (elements.processBtn) {
+      elements.processBtn.disabled = true;
+      elements.processBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Procesando...</span>';
+    }
+    
+    // Preparar parámetros
+    const parameters = {};
+    if (profileId === 'translate' && elements.targetLanguage) {
+      parameters.target_language = elements.targetLanguage.value;
+    }
+    
+    // Llamar al API
+    const response = await fetch('/llm/process', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        profile_id: profileId,
+        text: text,
+        parameters: parameters
+      })
+    });
+    
+    const data = await response.json();
+    
+    if (response.ok && data.success) {
+      // Mostrar resultado en una nueva sección
+      showProfileResult(profileId, data.output);
+      showToast('Texto procesado exitosamente', 'success');
+    } else {
+      const errorMsg = data.error?.message || 'Error al procesar el texto';
+      console.error('Error del servidor:', data);
+      
+      // Mensaje específico para errores de traducción
+      if (profileId === 'translate') {
+        showToast(`Error en traducción: ${errorMsg}`, 'error');
+      } else {
+        showToast(`Error: ${errorMsg}`, 'error');
+      }
+    }
+    
+  } catch (error) {
+    console.error('Error procesando con perfil:', error);
+    showToast('Error de conexión', 'error');
+  } finally {
+    // Restaurar botón
+    if (elements.processBtn) {
+      elements.processBtn.disabled = false;
+      elements.processBtn.innerHTML = '<i class="fas fa-bolt"></i><span>Procesar</span>';
+    }
+  }
+}
+
+// Mostrar resultado del perfil
+function showProfileResult(profileId, output) {
+  // Crear o actualizar sección de resultado
+  let resultSection = document.getElementById('profile-result-section');
+  if (!resultSection) {
+    resultSection = document.createElement('div');
+    resultSection.id = 'profile-result-section';
+    resultSection.className = 'transcription-section';
+    resultSection.innerHTML = `
+      <div class="section-header">
+        <h3><i class="fas fa-magic"></i> Resultado Procesado</h3>
+        <div class="transcription-actions">
+          <button id="copy-profile-result-btn" class="btn" title="Copiar resultado">
+            <i class="fas fa-copy"></i>
+            <span>Copiar</span>
+          </button>
+          <button id="download-profile-result-btn" class="btn" title="Descargar resultado">
+            <i class="fas fa-download"></i>
+            <span>Descargar</span>
+          </button>
+        </div>
+      </div>
+      <div class="transcription-box" id="profile-result-box"></div>
+    `;
+    
+    // Insertar después de la sección de perfiles
+    if (elements.llmProfilesSection) {
+      elements.llmProfilesSection.parentNode.insertBefore(resultSection, elements.llmProfilesSection.nextSibling);
+    }
+    
+    // Event listeners para los botones
+    const copyBtn = document.getElementById('copy-profile-result-btn');
+    const downloadBtn = document.getElementById('download-profile-result-btn');
+    
+    if (copyBtn) {
+      copyBtn.addEventListener('click', () => {
+        copyToClipboard(output);
+        showToast('Resultado copiado', 'success');
+      });
+    }
+    
+    if (downloadBtn) {
+      downloadBtn.addEventListener('click', () => {
+        const ts = new Date();
+        const name = `resultado_${profileId}_${ts.getFullYear()}${String(ts.getMonth() + 1).padStart(2, '0')}${String(ts.getDate()).padStart(2, '0')}_${String(ts.getHours()).padStart(2, '0')}${String(ts.getMinutes()).padStart(2, '0')}`;
+        downloadText(`${name}.txt`, output);
+        showToast('Resultado descargado', 'success');
+      });
+    }
+  }
+  
+  // Actualizar contenido
+  const resultBox = document.getElementById('profile-result-box');
+  if (resultBox) {
+    resultBox.innerHTML = `<p>${escapeHtml(output)}</p>`;
+  }
+  
+  // Mostrar sección
+  resultSection.style.display = 'block';
+  
+  // Animación de entrada
+  resultSection.style.opacity = '0';
+  resultSection.style.transform = 'translateY(20px)';
+  setTimeout(() => {
+    resultSection.style.transition = 'all 0.4s ease';
+    resultSection.style.opacity = '1';
+    resultSection.style.transform = 'translateY(0)';
+  }, 100);
+}
+
+// Mostrar sección de perfiles LLM
+function showLLMProfilesSection() {
+  if (!elements.llmProfilesSection) return;
+  
+  elements.llmProfilesSection.style.display = 'block';
+  
+  // Animación de entrada
+  elements.llmProfilesSection.style.opacity = '0';
+  elements.llmProfilesSection.style.transform = 'translateY(20px)';
+  setTimeout(() => {
+    elements.llmProfilesSection.style.transition = 'all 0.4s ease';
+    elements.llmProfilesSection.style.opacity = '1';
+    elements.llmProfilesSection.style.transform = 'translateY(0)';
   }, 100);
 }

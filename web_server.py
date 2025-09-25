@@ -200,6 +200,137 @@ class WebDictationServer:
             except Exception as e:
                 return jsonify({'error': str(e)}), 500
 
+        # Nuevos endpoints para perfiles de LLM
+        @self.app.route('/llm/profiles')
+        def get_llm_profiles():
+            """Obtener perfiles de procesamiento disponibles"""
+            profiles = [
+                {
+                    "id": "clean_format",
+                    "name": "Limpiar y Formatear",
+                    "description": "Mejora la puntuación, estructura y legibilidad del texto",
+                    "parameters": {},
+                    "timeout_multiplier": 1.0
+                },
+                {
+                    "id": "summarize",
+                    "name": "Resumir",
+                    "description": "Crea un resumen conciso y estructurado del texto",
+                    "parameters": {},
+                    "timeout_multiplier": 1.2
+                },
+                {
+                    "id": "extract_tasks",
+                    "name": "Extraer Lista de Tareas",
+                    "description": "Identifica tareas accionables con verbos en infinitivo",
+                    "parameters": {},
+                    "timeout_multiplier": 1.1
+                },
+                {
+                    "id": "format_email",
+                    "name": "Formatear como Email",
+                    "description": "Estructura el texto como un email profesional",
+                    "parameters": {},
+                    "timeout_multiplier": 1.3
+                },
+                {
+                    "id": "meeting_minutes",
+                    "name": "Crear Acta de Reunión",
+                    "description": "Organiza el texto como acta de reunión",
+                    "parameters": {},
+                    "timeout_multiplier": 1.4
+                },
+                {
+                    "id": "translate",
+                    "name": "Traducir",
+                    "description": "Traduce el texto al idioma seleccionado",
+                    "parameters": {"target_language": "English"},
+                    "timeout_multiplier": 2.0
+                }
+            ]
+            return jsonify({"profiles": profiles})
+
+        @self.app.route('/llm/process', methods=['POST'])
+        def process_with_profile():
+            """Procesar texto con un perfil específico"""
+            try:
+                data = request.get_json(silent=True) or {}
+                profile_id = data.get('profile_id')
+                text = (data.get('text') or '').strip()
+                parameters = data.get('parameters', {})
+                
+                if not profile_id:
+                    return jsonify({'error': {'code': 'INVALID_PROFILE', 'message': 'Profile ID is required'}}), 400
+                
+                if not text:
+                    return jsonify({'error': {'code': 'INVALID_TEXT', 'message': 'Text is required'}}), 400
+                
+                if not self.text_processor or not self.text_processor.is_available():
+                    return jsonify({'error': {'code': 'LLM_ERROR', 'message': 'LLM service not available'}}), 500
+                
+                # Mapear perfiles a funciones del text_processor
+                profile_mapping = {
+                    'clean_format': 'cleanup',
+                    'summarize': 'summary',
+                    'extract_tasks': 'tasks',
+                    'format_email': 'email',
+                    'meeting_minutes': 'meeting',
+                    'translate': 'translate'
+                }
+                
+                if profile_id not in profile_mapping:
+                    return jsonify({'error': {'code': 'INVALID_PROFILE', 'message': f'Profile {profile_id} not found'}}), 400
+                
+                # Procesar según el perfil
+                try:
+                    if profile_id == 'translate':
+                        target_language = parameters.get('target_language', 'English')
+                        # Mapeo completo de idiomas
+                        lang_mapping = {
+                            'English': 'en',
+                            'French': 'fr', 
+                            'German': 'de',
+                            'Portuguese': 'pt',
+                            'Spanish': 'es',
+                            'Italian': 'it',
+                            'Dutch': 'nl',
+                            'Russian': 'ru',
+                            'Chinese': 'zh',
+                            'Japanese': 'ja',
+                            'Korean': 'ko',
+                            'Arabic': 'ar'
+                        }
+                        lang_code = lang_mapping.get(target_language, 'en')
+                        print(f"Traduciendo a: {target_language} (código: {lang_code})")
+                        result = self.text_processor.translate_text(text, lang_code)
+                        print(f"Resultado traducción: {result[:100] if result else 'None'}...")
+                    else:
+                        result = self.text_processor.improve_text(text, profile_mapping[profile_id])
+                except Exception as e:
+                    print(f"Error procesando texto: {e}")
+                    return jsonify({'error': {'code': 'PROCESSING_ERROR', 'message': str(e)}}), 500
+                
+                if not result:
+                    error_msg = f'No se pudo procesar el texto con el perfil {profile_id}'
+                    if profile_id == 'translate':
+                        error_msg += f' al idioma {target_language}'
+                    return jsonify({'error': {'code': 'LLM_ERROR', 'message': error_msg}}), 500
+                
+                return jsonify({
+                    'success': True,
+                    'profile_id': profile_id,
+                    'output': result,
+                    'result_id': f"result_{int(datetime.now().timestamp())}",
+                    'metadata': {
+                        'processing_time': 0.0,
+                        'tokens_used': 0
+                    }
+                })
+                
+            except Exception as e:
+                print(f"Error processing with profile: {e}")
+                return jsonify({'error': {'code': 'LLM_ERROR', 'message': str(e)}}), 500
+
     def _initialize_components(self) -> None:
         try:
             if WHISPER_AVAILABLE and WhisperModel is not None:  # type: ignore

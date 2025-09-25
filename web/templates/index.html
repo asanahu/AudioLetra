@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/style.css?v=20250916-5">
+    <link rel="stylesheet" href="/static/css/profiles.css?v=20250916-5">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <meta name="color-scheme" content="light dark">
     <meta name="theme-color" content="#0ea5e9">
@@ -94,12 +95,12 @@
                 </div>
             </div>
 
-            <!-- Summary Section -->
-            <div class="transcription-section" id="summary-section">
+            <!-- Summary Section (Hidden - functionality moved to LLM Profiles) -->
+            <div class="transcription-section" id="summary-section" style="display:none;">
                 <div class="section-header">
                     <h3><i class="fas fa-list"></i> Resumen</h3>
                     <div class="transcription-actions">
-                        <button id="generate-summary-btn" class="btn" title="Generar resumen">
+                        <button id="generate-summary-btn" class="btn" title="Generar resumen" style="display:none;">
                             <i class="fas fa-bolt"></i>
                             <span>Generar resumen</span>
                         </button>
@@ -108,7 +109,47 @@
                 <div class="transcription-box" id="summary-box"></div>
             </div>
 
-            <!-- Translation Section -->
+            <!-- LLM Processing Profiles Section -->
+            <div class="transcription-section" id="llm-profiles-section" style="display:none;">
+                <div class="section-header">
+                    <h3><i class="fas fa-magic"></i> Procesar con IA</h3>
+                    <div class="profile-controls">
+                        <select id="profile-select" class="profile-select">
+                            <option value="">Selecciona un perfil...</option>
+                        </select>
+                        <div id="language-selector" class="language-selector" style="display: none;">
+                            <label for="target-language">Idioma destino:</label>
+                            <select id="target-language" class="target-language">
+                                <option value="English">Inglés</option>
+                                <option value="French">Francés</option>
+                                <option value="German">Alemán</option>
+                                <option value="Portuguese">Portugués</option>
+                                <option value="Spanish">Español</option>
+                                <option value="Italian">Italiano</option>
+                                <option value="Dutch">Holandés</option>
+                                <option value="Russian">Ruso</option>
+                                <option value="Chinese">Chino</option>
+                                <option value="Japanese">Japonés</option>
+                                <option value="Korean">Coreano</option>
+                                <option value="Arabic">Árabe</option>
+                            </select>
+                        </div>
+                        <button id="process-btn" class="btn" disabled>
+                            <i class="fas fa-bolt"></i>
+                            <span>Procesar</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="profile-info">
+                    <p><strong>🔒 Privacidad:</strong> Solo se envía texto al LLM, nunca audio.</p>
+                </div>
+                <div class="results-container" id="results-container">
+                    <div class="result-tabs" id="result-tabs"></div>
+                    <div class="results-panels" id="results-panels"></div>
+                </div>
+            </div>
+
+            <!-- Translation Section (Hidden - functionality moved to LLM Profiles) -->
             <div class="transcription-section" id="translation-section" style="display:none;">
                 <div class="section-header">
                     <h3><i class="fas fa-language"></i> Traducción (inglés)</h3>
@@ -146,5 +187,6 @@
     <div class="toast-container" id="toast-container"></div>
 
     <script src="/static/js/app.js?v=20250916-5"></script>
+    <script src="/static/js/profiles/profile-manager.js?v=20250916-5"></script>
 </body>
 </html>

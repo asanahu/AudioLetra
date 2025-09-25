@@ -1,0 +1,317 @@
+﻿/**
+ * AudioLetra Profile Styles
+ * CSS for profile dropdown and result panels
+ */
+
+/* Profile controls styling */
+.profile-controls {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.profile-select {
+    min-width: 200px;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: white;
+}
+
+.language-selector {
+    display: none;
+    align-items: center;
+    gap: 10px;
+}
+
+.language-selector label {
+    font-weight: bold;
+    color: #333;
+}
+
+.target-language {
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: white;
+}
+
+.profile-info {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #e7f3ff;
+    border-left: 4px solid #007bff;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* Dark theme support */
+.theme-dark .profile-select,
+.theme-dark .target-language {
+    background-color: #2d3748;
+    border-color: #4a5568;
+    color: #e2e8f0;
+}
+
+.theme-dark .profile-info {
+    background-color: #1a365d;
+    border-left-color: #3182ce;
+    color: #e2e8f0;
+}
+
+.theme-dark .language-selector label {
+    color: #e2e8f0;
+}
+.profile-section {
+    margin: 20px 0;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.profile-controls {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.profile-select {
+    min-width: 200px;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.language-selector {
+    display: none;
+    align-items: center;
+    gap: 10px;
+}
+
+.language-selector label {
+    font-weight: bold;
+    color: #333;
+}
+
+.target-language {
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.process-btn {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.process-btn:hover:not(:disabled) {
+    background-color: #0056b3;
+}
+
+.process-btn:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+.processing-indicator {
+    display: none;
+    text-align: center;
+    padding: 20px;
+    color: #007bff;
+    font-weight: bold;
+}
+
+.processing-indicator::after {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #007bff;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin 1s linear infinite;
+    margin-left: 10px;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.results-section {
+    margin-top: 30px;
+}
+
+.result-tabs {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+.result-tab {
+    padding: 10px 15px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.result-tab:hover {
+    background-color: #e9ecef;
+}
+
+.result-tab.active {
+    background-color: white;
+    border-bottom: 1px solid white;
+    margin-bottom: -1px;
+}
+
+.result-panel {
+    border: 1px solid #ddd;
+    border-radius: 0 4px 4px 4px;
+    background-color: white;
+    min-height: 200px;
+}
+
+.result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+    background-color: #f8f9fa;
+}
+
+.result-header h3 {
+    margin: 0;
+    color: #333;
+    font-size: 18px;
+}
+
+.result-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.download-btn {
+    padding: 6px 12px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.download-btn:hover {
+    background-color: #218838;
+}
+
+.result-content {
+    padding: 20px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.message {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 4px;
+    font-weight: bold;
+    z-index: 1000;
+    max-width: 300px;
+}
+
+.message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .profile-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .profile-select,
+    .target-language {
+        width: 100%;
+    }
+    
+    .result-tabs {
+        flex-wrap: wrap;
+    }
+    
+    .result-header {
+        flex-direction: column;
+        gap: 10px;
+        align-items: stretch;
+    }
+    
+    .result-actions {
+        justify-content: center;
+    }
+}
+
+/* Integration with existing AudioLetra styles */
+.transcription-container {
+    position: relative;
+}
+
+.profile-section {
+    margin-top: 20px;
+}
+
+/* Loading states */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #007bff;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin 1s linear infinite;
+}

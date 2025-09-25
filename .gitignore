@@ -154,3 +154,7 @@ models/
 # Archivos de configuración específicos del sistema
 system_config.json
 user_preferences.json
+
+.codex/
+.codex/*
+!.codex/commands
